@@ -1,5 +1,7 @@
 # 🧬 NSGA-II – Pareto-Dominanz statt fester Gewichtung
 
+**[→ Demo live ausprobieren](https://sebastianhanisch-nsga2-demo.streamlit.app/)**
+
 Zweites Stück der **Populations-Metaheuristiken-Linie** der "Konzepte"-Reihe im Portfolio von [Sebastian Hanisch](https://sebastianhanisch.net) –
 Operations Research und Machine Learning. Fortsetzung der [genetic-algorithm-demo](https://sebastianhanisch-genetic-algorithm-demo.streamlit.app/):
 deren eigenes Experiment zeigt, dass eine feste Gewichtung mehrerer Ziele nur einen Teil der Pareto-Front erreicht. NSGA-II
