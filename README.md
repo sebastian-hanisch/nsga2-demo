@@ -10,7 +10,7 @@ Gewichtung, mit einer **Crowding-Distance** zur Diversitätserhaltung.
 
 Vehikel ist dieselbe Lieferroute wie die genetic-algorithm-demo (Depot + n Stopps, 100 × 100 km) - jetzt mit zwei oder drei Zielen
 (Distanz, CO2, optional Fahrzeit). Die direkten Nachfolger in der Linie sind **NSGA-III** (fix: Crowding-Distance versagt bei vielen
-Zielen) und **MOEA/D** (Kontrast: Zerlegung in Skalarisierungs-Unterprobleme statt Dominanz-Sortierung) - keiner davon ist gebaut.
+Zielen) und **MOEA/D** (Kontrast: Zerlegung in Skalarisierungs-Unterprobleme statt Dominanz-Sortierung) - beide sind als eigene Stücke gebaut ([nsga3-demo](../nsga3-demo), [moead-demo](../moead-demo)).
 
 ## Warum dieses Problem
 
@@ -51,8 +51,8 @@ Zwei echte Fehler wurden beim ersten Live-Test gefunden, nicht vorab angenommen:
    Frontpunkte aufblies. Fix: die Brute-Force-Front dedupliziert jetzt vor der Nicht-Dominanz-Prüfung, wie die
    genetic-algorithm-demo es implizit auch tut.
 2. Das Experiment "2 vs. 3 Ziele" zeigte bei großzügigem Budget (Populationsgröße 60) **keinen** Rückgang der Abdeckung mit mehr
-   Zielen - im Gegenteil, 3 Ziele deckten sogar vollständiger ab (Front wächst von 8 auf 16 Punkte, beide werden bei genug
-   Population vollständig erreicht). Erst mit einem eigenen, deutlich knapperen Budget (Populationsgröße 10) zeigt sich der
+   Zielen - im Gegenteil, 3 Ziele deckten sogar vollständiger ab (Front wächst von 8 auf 16 Punkte; im Median werden bei 3 Zielen
+   alle 16 Punkte erreicht, bei 2 Zielen 6 von 8, also 75 %). Erst mit einem eigenen, deutlich knapperen Budget (Populationsgröße 10) zeigt sich der
    erwartete Rückgang (50 % → 37,5 % Abdeckung) - klein und seed-empfindlich, aber in die erwartete Richtung. Ehrlich so berichtet,
    inklusive der Umkehrung bei großzügigem Budget (siehe Tests).
 
@@ -99,7 +99,7 @@ Experimente + Sweep auf Abruf) und `test_claims.py` (jede Zahl aus diesem README
 
 ## Bewusst nicht umgesetzt
 
-- Mehr als drei Ziele oder eine allgemeine Referenzpunkt-Nischenbildung - das bringt der geplante Nachfolger NSGA-III.
+- Mehr als drei Ziele oder eine allgemeine Referenzpunkt-Nischenbildung - das bringt der Nachfolger NSGA-III ([nsga3-demo](../nsga3-demo)).
 - Ein 3D- oder allgemeines M-dimensionales Hypervolumen - nur die exakte 2D-Variante ist implementiert.
 - Ein PDF-Export - wie bei den anderen Konzepte-Demos dieses Portfolios nicht Teil der Linie.
 
@@ -113,3 +113,7 @@ streamlit run app.py
 ```
 
 Gebaut mit Streamlit, Plotly und numpy.
+
+---
+
+Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). Mehr zur Reihe: [Populations-Metaheuristiken: GA bis Memetic](https://sebastianhanisch.net/konzepte-populations-metaheuristiken.html).

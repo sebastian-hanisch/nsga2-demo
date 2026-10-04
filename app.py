@@ -216,7 +216,7 @@ st.markdown("---")
 
 st.subheader("🔬 Wird die Abdeckung mit mehr Zielen schwächer?")
 st.caption(f"Dieselbe kleine Instanz, einmal mit 2 und einmal mit 3 Zielen (Distanz, CO2, Fahrzeit) - mit knappem Budget (Population {C.OBJCOUNT_POP}, unabhängig von der Seitenleiste). "
-           "Bei großzügigem Budget (z. B. der Standardeinstellung) deckt NSGA-II beide Fälle vollständig oder fast vollständig ab, der Unterschied verschwindet oder kehrt sich sogar um - "
+           "Bei großzügigem Budget (z. B. der Standardeinstellung) deckt NSGA-II die Front mit 3 Zielen im Median vollständig und mit 2 Zielen zu drei Vierteln ab - der Rückgang verschwindet, der Unterschied kehrt sich sogar um - "
            "erst unter Druck wird sichtbar, dass mehr Ziele die Suche schwerer machen.")
 if st.button("2 gegen 3 Ziele rechnen (dauert etwa 15 Sekunden)", key="objcount_start"):
     st.session_state["objcount_on"] = True
@@ -283,6 +283,6 @@ Implementiert in `nsga2_algorithm.py` (Sortierung, Crowding-Distance, Hauptschle
 st.markdown("---")
 st.caption(
     "Diese Demo ist Teil des Portfolios von [Sebastian Hanisch](https://sebastianhanisch.net) – "
-    "Operations Research und Machine Learning. Interesse an einer maßgeschneiderten Lösung für "
-    "Ihr Unternehmen? [Kontakt aufnehmen](https://sebastianhanisch.net/kontakt.html)"
+    "Operations Research und Machine Learning ([Über mich](https://sebastianhanisch.net/ueber-mich.html)). "
+    "Mehr zur Reihe: [Populations-Metaheuristiken: GA bis Memetic](https://sebastianhanisch.net/konzepte-populations-metaheuristiken.html)."
 )
