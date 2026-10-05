@@ -13,6 +13,7 @@ import nsga2_constants as C
 import nsga2_scenario as S
 
 BRUTE_FORCE_MAX_N = 9      # (n_nodes - 1)! Touren; bei 9 Knoten sind das 40 320
+OBJ_DECIMALS = 6           # Zielwerte gelten als gleich, wenn sie sich erst jenseits dieser Nachkommastelle unterscheiden
 
 
 @dataclass(frozen=True)
@@ -73,12 +74,16 @@ def brute_force_front(n_nodes, fn):
     Zielwerte) zurück. Dedupliziert vor der Sortierung, sonst zählt ein zweimal erreichter Frontwert doppelt (anders als bei der
     genetic-algorithm-demo, deren Front ebenfalls über eindeutige Werte zählt). Nutzt `non_dominated_mask` (O(N * F)), nicht die
     volle (N, N)-Dominanzmatrix - bei 9 Knoten sind das 40 320 Touren, eine volle Matrix (1.6 Milliarden Paare) wäre zu
-    langsam/speicherhungrig."""
+    langsam/speicherhungrig. "Eindeutig" heißt bis auf OBJ_DECIMALS Nachkommastellen: Eine gespiegelte Tour summiert dieselben
+    Kanten in anderer Reihenfolge, die Zielwerte unterscheiden sich dann um Fließkomma-Rauschen (~1e-13) - als exakt
+    verschiedene Zeilen würde np.unique sie getrennt führen, und beide könnten nicht-dominiert bleiben (Front um einen
+    Scheinpunkt zu groß)."""
     tours = np.array([(0,) + p for p in permutations(range(1, n_nodes))], dtype=np.int64)
     obj = fn(tours)
-    unique_obj = np.unique(obj, axis=0)
-    nd_mask = A.non_dominated_mask(unique_obj)
-    return obj, unique_obj[nd_mask]
+    rounded = np.round(obj, OBJ_DECIMALS)
+    _, first = np.unique(rounded, axis=0, return_index=True)
+    nd_mask = A.non_dominated_mask(rounded[first])
+    return obj, obj[first][nd_mask]
 
 
 def front_coverage(true_front_obj, found_obj, tol=1e-6):

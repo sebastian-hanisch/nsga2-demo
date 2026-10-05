@@ -47,7 +47,7 @@ OBJCOUNT_POP, OBJCOUNT_GENS = 10, 150
 
 # --- Experimente -----------------------------------------------------------------------------------------------------------------------------
 
-HYPERVOLUME_REFERENCE_MARGIN = 1.10    # Referenzpunkt = 1.10 * (max Distanz, max CO2) der Startpopulation
+HYPERVOLUME_REFERENCE_MARGIN = 1.10    # Referenzpunkt = 1.10 * (max Distanz, max CO2) über eine Zufallsstichprobe von 2000 Touren der Instanz
 
 SWEEP_SEEDS = tuple(range(700000, 700005))
 SWEEP_VALUES = {"pop": (10, 20, 40, 60, 100, 150), "gens": (20, 50, 100, 150, 250, 400)}

@@ -227,7 +227,7 @@ if st.session_state.get("objcount_on"):
     oc_cols = st.columns(len(rows_oc))
     for col, r in zip(oc_cols, rows_oc):
         col.metric(f"{r['n_obj']} Ziele", f"{r['coverage_share']:.0%}", help=f"Front-Größe {r['front_size']}, im Median {r['reached_median']:.0f} getroffen.")
-    st.caption("Die Front selbst wächst mit der Zielzahl (hier von 8 auf 16 Punkte) - bei diesem winzigen Beispiel mit nur drei Zielen reicht das für eine ehrliche, aber kleine und "
+    st.caption("Die Front selbst wächst mit der Zielzahl (hier von 8 auf 15 Punkte) - bei diesem winzigen Beispiel mit nur drei Zielen reicht das für eine ehrliche, aber kleine und "
                "seed-empfindliche Demonstration. NSGA-IIIs eigentliche Motivation liegt bei echt vielen Zielen (vier und mehr), die diese Demo bewusst nicht zeigt.")
 
 st.markdown("---")

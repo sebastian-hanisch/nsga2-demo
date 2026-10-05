@@ -75,9 +75,9 @@ def test_comparison_experiment_headline_claims():
 
 def test_objective_count_experiment_headline_claims():
     rows = {r["n_obj"]: r for r in E.objective_count_experiment()}
-    assert rows[2]["front_size"] == 8 and rows[3]["front_size"] == 16
+    assert rows[2]["front_size"] == 8 and rows[3]["front_size"] == 15
     assert rows[2]["coverage_share"] == pytest.approx(0.5, abs=0.05)
-    assert rows[3]["coverage_share"] == pytest.approx(0.375, abs=0.05)
+    assert rows[3]["coverage_share"] == pytest.approx(1 / 3, abs=0.05)
     assert rows[3]["coverage_share"] < rows[2]["coverage_share"]
 
 

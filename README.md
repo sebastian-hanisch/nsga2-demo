@@ -44,26 +44,31 @@ kleine Front (O(N · Frontgröße)).
 
 ## Befunde / Korrekturen
 
-Zwei echte Fehler wurden beim ersten Live-Test gefunden, nicht vorab angenommen:
+Zwei echte Fehler wurden beim ersten Live-Test gefunden, ein dritter bei der späteren Orakelprüfung - nicht vorab angenommen:
 
 1. Die Brute-Force-Referenz zählte anfangs **Touren** statt eindeutiger Zielwerte - zwei verschiedene Touren können denselben
    (Distanz, CO2)-Wert erreichen, was die kleine Vergleichsinstanz auf 9 statt der von der genetic-algorithm-demo gemessenen 8
    Frontpunkte aufblies. Fix: die Brute-Force-Front dedupliziert jetzt vor der Nicht-Dominanz-Prüfung, wie die
    genetic-algorithm-demo es implizit auch tut.
 2. Das Experiment "2 vs. 3 Ziele" zeigte bei großzügigem Budget (Populationsgröße 60) **keinen** Rückgang der Abdeckung mit mehr
-   Zielen - im Gegenteil, 3 Ziele deckten sogar vollständiger ab (Front wächst von 8 auf 16 Punkte; im Median werden bei 3 Zielen
-   alle 16 Punkte erreicht, bei 2 Zielen 6 von 8, also 75 %). Erst mit einem eigenen, deutlich knapperen Budget (Populationsgröße 10) zeigt sich der
-   erwartete Rückgang (50 % → 37,5 % Abdeckung) - klein und seed-empfindlich, aber in die erwartete Richtung. Ehrlich so berichtet,
+   Zielen - im Gegenteil, 3 Ziele deckten sogar vollständiger ab (Front wächst von 8 auf 15 Punkte; im Median werden bei 3 Zielen
+   alle 15 Punkte erreicht, bei 2 Zielen 6 von 8, also 75 %). Erst mit einem eigenen, deutlich knapperen Budget (Populationsgröße 10) zeigt sich der
+   erwartete Rückgang (50 % → 33,3 % Abdeckung) - klein und seed-empfindlich, aber in die erwartete Richtung. Ehrlich so berichtet,
    inklusive der Umkehrung bei großzügigem Budget (siehe Tests).
+3. Die Brute-Force-Front zählte bei drei Zielen einen **Scheinpunkt**: Eine gespiegelte Tour summiert dieselben Kanten in anderer
+   Reihenfolge, ihre Zielwerte unterscheiden sich nur um Fließkomma-Rauschen (~1e-13), `np.unique` führte beide Zeilen getrennt und
+   beide blieben nicht-dominiert - die 3-Ziele-Front hatte 16 statt 15 Punkte (und die Abdeckung unter knappem Budget 6/16 = 37,5 %
+   statt 5/15 = 33,3 %). Fix: Eindeutigkeit bis auf 6 Nachkommastellen (`OBJ_DECIMALS`), geprüft gegen eine unabhängige Aufzählung
+   (`tests/test_oracle_nsga2.py`).
 
 ## Befunde (gemessen, keine Behauptungen)
 
 | Frage | Befund | Test |
 |---|---|---|
 | Trifft NSGA-II die Pareto-Front besser als eine feste Gewichtung? | Auf derselben 8-Stopp-Instanz: NSGA-II trifft im Median **6 von 8** Frontpunkten, die gewichtete Summe der genetic-algorithm-demo nur **4 von 8** | `test_comparison_experiment_headline_claims` |
-| Wird die Abdeckung mit mehr Zielen schwächer? | Nur unter knappem Budget (Population 10): **50 % → 37,5 %** Abdeckung (2 → 3 Ziele). Bei großzügigem Budget kehrt sich das um | `test_objective_count_experiment_headline_claims`, `test_objective_count_experiment_reverses_under_a_generous_budget` |
+| Wird die Abdeckung mit mehr Zielen schwächer? | Nur unter knappem Budget (Population 10): **50 % → 33,3 %** Abdeckung (2 → 3 Ziele). Bei großzügigem Budget kehrt sich das um | `test_objective_count_experiment_headline_claims`, `test_objective_count_experiment_reverses_under_a_generous_budget` |
 | Hilft eine größere Population? | 150 statt 60 Individuen: 2D-Hypervolumen **+9 %**; 15 statt 60: **-16 %** | `test_grosse_population_preset_claims`, `test_kleine_population_preset_claims` |
-| Konvergiert die Population zur vollen Front? | Im Standardfall wächst Front 1 von 1 (Startpopulation) auf alle 60 Individuen | `test_standardfall_preset_claims` |
+| Konvergiert die Population zur vollen Front? | Im Standardfall wächst Front 1 von 1 (Startpopulation) auf alle 60 Individuen - Individuen mit identischer Tour zählen dabei einzeln mit, die Endpopulation besteht aus deutlich weniger verschiedenen Touren (Orakel-Test: weniger als ein Drittel) | `test_standardfall_preset_claims` |
 
 ## Ehrliche Grenzen
 
@@ -78,7 +83,7 @@ Zwei echte Fehler wurden beim ersten Live-Test gefunden, nicht vorab angenommen:
 
 ## Tests
 
-127 Tests (`pytest tests/ -v`): Kern gegen Handrechnung (6-Punkte-Beispiel für nicht-dominierte Sortierung und
+137 Tests (`pytest tests/ -v`): Kern gegen Handrechnung (6-Punkte-Beispiel für nicht-dominierte Sortierung und
 Crowding-Distance) und Bibliotheksgegenprobe (**pymoo** - `fast_non_dominated_sort`/`calc_crowding_distance` stimmen exakt
 überein, geprüft über 30 bzw. 20 zufällige Instanzen mit 2-3 Zielen), `non_dominated_mask` gegen die vollständige Dominanzmatrix
 kreuzgeprüft, NSGA-II findet auf einer sehr kleinen Instanz nachweislich die Mehrheit der Brute-Force-Front, AppTest-Rauchtests
